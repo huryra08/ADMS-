@@ -1,0 +1,305 @@
+create sequence seq_mgr_id increment by 1 start with 1 nocache nocycle;
+
+create table MANAGER(mgr_id number(10) primary key, mgr_pass varchar2(32),mgr_name varchar2(20),mgr_email varchar(30));
+
+insert into MANAGER(mgr_id, mgr_pass, mgr_name, mgr_email) VALUES(seq_mgr_id.NEXTVAL,'tiger','meraz','meraz@gmail.com');
+insert into MANAGER(mgr_id, mgr_pass, mgr_name, mgr_email) VALUES(seq_mgr_id.NEXTVAL,'tiger','pranto','pranto@gmail.com');
+insert into MANAGER(mgr_id, mgr_pass, mgr_name, mgr_email) VALUES(seq_mgr_id.NEXTVAL,'tiger','huryra','huryra@gmail.com');
+insert into MANAGER(mgr_id, mgr_pass, mgr_name, mgr_email) VALUES(seq_mgr_id.NEXTVAL,'tiger','robin','robin@gmail.com');
+insert into MANAGER(mgr_id, mgr_pass, mgr_name, mgr_email) VALUES(seq_mgr_id.NEXTVAL,'tiger','shuvo','shuvo@gmail.com');
+
+select * from manager
+
+
+create sequence seq_customer_id increment by 1 start with 1 nocache nocycle;
+
+create table CUSTOMER(customer_id number(18) primary key,customer_name varchar2(50),customer_pass varchar2(32),customer_email varchar2(30),customer_phn varchar2(14),mgr_id number(10),foreign key(mgr_id) references MANAGER(mgr_id));
+
+insert into CUSTOMER(customer_id, customer_name, customer_pass, customer_email, customer_phn, mgr_id) VALUES (seq_customer_id.NEXTVAL, 'shourov', 'shu1232', 'shourov@yahoo.com', '01715477065', 1);
+insert into CUSTOMER(customer_id, customer_name, customer_pass, customer_email, customer_phn, mgr_id) VALUES (seq_customer_id.NEXTVAL, 'tanvir', 'tanvir32', 'tanvir@gmail.com', '01833071118', 3);
+insert into CUSTOMER(customer_id, customer_name, customer_pass, customer_email, customer_phn, mgr_id) VALUES (seq_customer_id.NEXTVAL, 'missu', 'missu58', 'missu@gmail.com', '01919223255', 2);
+insert into CUSTOMER(customer_id, customer_name, customer_pass, customer_email, customer_phn, mgr_id) VALUES (seq_customer_id.NEXTVAL, 'ruhan', 'ruhan675', 'ruhan@gmail.com', '01515477066', 4);
+insert into CUSTOMER(customer_id, customer_name, customer_pass, customer_email, customer_phn, mgr_id) VALUES (seq_customer_id.NEXTVAL, 'Huryra', 'hur1232', 'huryra@yahoo.com', '01795487075', 2);
+
+select * from customer;
+
+
+create sequence seq_ticket_id increment by 1 start with 1 nocache nocycle;
+
+create table TICKET(ticket_id number(10) primary key, total_ticket number(1), ticket_status varchar2(10), customer_id number(18), foreign key(customer_id) references CUSTOMER (customer_id));
+
+insert into TICKET values (seq_ticket_id.NEXTVAL, 1, 'booked', 2);
+insert into TICKET values (seq_ticket_id.NEXTVAL, 2, 'available', 3);
+insert into TICKET values (seq_ticket_id.NEXTVAL, 1, 'booked', 1);
+insert into TICKET values (seq_ticket_id.NEXTVAL, 3, 'available', 3);
+insert into TICKET values (seq_ticket_id.NEXTVAL, 1, 'available', 4);
+
+select * from ticket
+drop table bus
+
+create sequence seq_bus_id increment by 1 start with 1 nocache nocycle;
+
+create table BUS(bus_id number(10) primary key,departure varchar2(20),destination varchar2(20), departure_time date, arrival_time date, bus_cost number(10,2), bus_class varchar2(10),mgr_id number(10),foreign key(mgr_id) references MANAGER(mgr_id));
+ 
+insert into BUS(bus_id,departure,destination,departure_time,arrival_time,bus_cost,bus_class,mgr_id)values (seq_bus_id.NEXTVAL,'dhaka','cox-bazar',to_date('05-May-23 10.00 AM', 'dd-mon-yy hh:mi AM.'),to_date('05-May-23 11.30 AM', 'dd-mon-yy hh:mi AM'), 900, 'Economy', 2);
+insert into BUS(bus_id,departure,destination,departure_time,arrival_time,bus_cost,bus_class,mgr_id)values (seq_bus_id.NEXTVAL,'dhaka','sylhet',to_date('10-May-23 09.00 AM', 'dd-mon-yy hh:mi AM.'),to_date('10-May-23 10.30 AM', 'dd-mon-yy hh:mi AM'), 1700, 'business', 3);
+insert into BUS(bus_id,departure,destination,departure_time,arrival_time,bus_cost,bus_class,mgr_id)values (seq_bus_id.NEXTVAL,'rajshahi','chittagong',to_date('20-May-23 09.00 PM', 'dd-mon-yy hh:mi PM.'),to_date('20-May-23 10.30 PM', 'dd-mon-yy hh:mi PM'),1500, 'Economy', 2);
+insert into BUS(bus_id,departure,destination,departure_time,arrival_time,bus_cost,bus_class,mgr_id)values (seq_bus_id.NEXTVAL,'sylhet','rajshahi',to_date('26-May-23 09.00 AM', 'dd-mon-yy hh:mi AM.'),to_date('26-May-23 10.30 AM', 'dd-mon-yy hh:mi AM'), 2700, 'business', 1);
+insert into BUS(bus_id,departure,destination,departure_time,arrival_time,bus_cost,bus_class,mgr_id)values (seq_bus_id.NEXTVAL,'dhaka','kuakata',to_date('05-Jun-23 10.00 AM', 'dd-mon-yy hh:mi AM.'),to_date('05-Jun-23 11.00 AM', 'dd-mon-yy hh:mi AM'), 1600, 'business', 4);
+
+select * from bus
+
+
+create sequence seq_booking_id increment by 1 start with 1 nocache nocycle;
+
+CREATE TABLE BOOKING (
+  booking_id NUMBER(10) PRIMARY KEY,
+  customer_id NUMBER(18),
+  bus_id NUMBER(10),
+  FOREIGN KEY (customer_id) REFERENCES CUSTOMER (customer_id),
+  FOREIGN KEY (bus_id) REFERENCES BUS (bus_id)
+);
+
+
+insert into BOOKING values (seq_booking_id.NEXTVAL,1,2);
+insert into BOOKING values (seq_booking_id.NEXTVAL,2,4);
+insert into BOOKING values (seq_booking_id.NEXTVAL, 2,1);
+insert into BOOKING values (seq_booking_id.NEXTVAL, 4,3);
+insert into BOOKING values (seq_booking_id.NEXTVAL, 3,4);
+
+select * from BOOKING;
+
+create sequence seq_order_id increment by 1 start with 1 nocache nocycle;
+
+CREATE TABLE ORDER_TICKET (order_id NUMBER(10) PRIMARY KEY,bus_id NUMBER(10),ticket_id NUMBER(10),FOREIGN KEY (bus_id) REFERENCES BUS (bus_id),FOREIGN KEY (ticket_id) REFERENCES TICKET (ticket_id));
+
+
+insert into ORDER_TICKET values (seq_order_id.NEXTVAL,1,2);
+insert into ORDER_TICKET values (seq_order_id.NEXTVAL,2,3);
+insert into ORDER_TICKET values (seq_order_id.NEXTVAL,4,1);
+insert into ORDER_TICKET values (seq_order_id.NEXTVAL,3,3);
+insert into ORDER_TICKET values (seq_order_id.NEXTVAL,5,4);
+
+select * from ORDER_TICKET;
+
+
+create or replace view pending_tickets as select distinct c.customer_id, c.customer_name, 
+c.customer_email, t.ticket_id, t.total_ticket, t.ticket_status from customer c, ticket t where 
+c.customer_id=t.customer_id and t.ticket_status='pending';
+
+create or replace view customer_bus_details as select distinct c.customer_id, c.customer_name, 
+bs.bus_id, bs.departure, bs.destination, bs.departure_time, t.ticket_id, t.total_ticket , 
+t.total_ticket*bs.bus_cost as TOTAL_BUS_COST from bus bs, ticket t, booking bk, customer 
+c where c.customer_id=t.customer_id and bk.customer_id=c.customer_id and 
+bk.bus_id=bs.bus_id;
+
+
+create or replace view customer_bus_booking as select distinct c.customer_id, 
+c.customer_name, c.customer_email, c.customer_phn, bk.booking_id,bk.bus_id from customer c, 
+booking bk where c.customer_id=bk.customer_id;
+
+
+create or replace view tickets_of_bus as select bs.bus_id, sum(t.total_ticket) as total_tickets 
+from bus bs, ticket t, order_ticket ot where t.ticket_id=ot.ticket_id and ot.bus_id=bs.bus_id 
+group by bs.bus_id;
+
+create or replace package p_customer_ticket as
+procedure book_customer_ticket(c_id customer.customer_id%type, bs_id bus.bus_id%type, 
+no_tickets ticket.total_ticket%type);
+end p_customer_ticket;
+create or replace package body p_customer_ticket
+as
+function valid_bus(bs_id in bus.bus_id%type)
+return boolean
+is
+cnt_bs number;
+begin
+select count(*) into cnt_bs from bus where bus_id=bs_id;
+if cnt_bs>0 then
+return true;
+else
+return false;
+end if;
+end valid_bus;
+function valid_customer(c_id customer.customer_id%type)
+return boolean
+
+is
+cnt_c number;
+begin
+select count(*) into cnt_c from customer where customer_id=c_id;
+if cnt_c>0 then
+return true;
+else
+return false;
+end if;
+end valid_customer;
+procedure book_customer_ticket(c_id customer.customer_id%type, bs_id bus.bus_id%type, 
+no_tickets ticket.total_ticket%type)
+as
+inval_bus exception;
+inval_customer exception;
+inval_ticket exception;
+begin
+if c_id<1 then
+raise inval_customer;
+elsif bs_id<1 then
+raise inval_bus;
+elsif no_tickets<1 then
+raise inval_ticket;
+elsif valid_customer(c_id) AND valid_bus(bs_id) then
+insert into TICKET values (seq_ticket_id.NEXTVAL, no_tickets, 'pending',c_id);
+insert into BOOKING values (seq_booking_id.NEXTVAL,c_id,bs_id);
+end if;
+exception
+when inval_bus then
+raise_application_error(-20227,'Bus Not Exist');
+when inval_customer then
+raise_application_error(-20228,'Customer Not Exist');
+when inval_ticket then
+raise_application_error(-20229,'Invalid Ticket');
+when others then
+raise_application_error(-20230,'Something Went Wrong!');
+end book_customer_ticket;
+end p_customer_ticket;
+
+
+begin
+p_customer_ticket.book_customer_ticket(7,21,5);
+end;
+
+
+
+
+create or replace package p_bus
+as
+procedure bus_cost_up(bs_id bus.bus_id%type, bs_cost bus.bus_cost%type);
+procedure bus_departure_up(bs_id bus.bus_id%type,bs_dep bus.departure%type);
+end p_bus;
+
+
+create or replace package body p_bus
+as
+function valid_bus(bs_id bus.bus_id%type)
+return boolean
+is
+cnt_bs number;
+begin
+select count(*) into cnt_bs from bus where bus_id=bs_id;
+if cnt_bs>0 then
+return true;
+else
+return false;
+end if;
+end valid_bus;
+procedure bus_cost_up(bs_id bus.bus_id%type, bs_cost bus.bus_cost%type)
+as
+inval_bus exception;
+begin
+if bs_id<1 then
+raise inval_bus;
+elsif valid_bus(bs_id) then
+update bus set bus_cost=bs_cost where bus_id=bs_id;
+end if;
+exception
+when inval_bus then
+raise_application_error(-20225,'Bus Not Exist');
+when others then
+raise_application_error(-20226,'Something Went Wrong!');
+end bus_cost_up;
+procedure bus_departure_up(bs_id bus.bus_id%type,bs_dep bus.departure%type)
+as
+inval_bus exception;
+begin
+if bs_id<1 then
+raise inval_bus;
+elsif valid_bus(bs_id) then
+update bus set departure=bs_dep where bus_id=bs_id;
+end if;
+exception
+when inval_bus then
+raise_application_error(-20225,'Bus Not Exist');
+when others then
+raise_application_error(-20226,'Something Went Wrong!');
+end bus_departure_up;
+end p_bus;
+
+
+begin
+p_bus.bus_cost_up(:bs_id,:cost);
+end;
+
+create or replace function check_bsid(bs_id bus.bus_id%type)
+return boolean
+as
+cntx number;
+begin
+select count(bus_id) into cntx from bus where bus_id=bs_id;
+if cntx>0 then
+return true;
+else
+return false;
+end if;
+end;
+create or replace procedure delete_bus(bs_id in bus.bus_id%type)
+as
+cnt boolean;
+begin
+cnt:=check_bsid(bs_id);
+if cnt then
+delete from booking where bus_id=bs_id;
+delete from bus where bus_id=bs_id;
+dbms_output.put_line('Bus Deleted');
+else
+dbms_output.put_line('Error in Deleting Bus');
+end if;
+end;
+
+begin
+delete_bus(2);
+end;
+
+
+create or replace trigger bus_security before insert or update or delete on bus
+begin
+if to_char(sysdate,'HH24') not between '8' and '22' or to_char(sysdate,'DY') in ('FRI','SAT') then
+raise_application_error(-20200,'Operation Failed');
+end if;
+end;
+
+
+create sequence seq_bus_dml increment by 1 start with 1 nocycle nocache;
+create table bus_dml_log(fdml_id number(10) primary key,user_name varchar2(20), opt_name 
+varchar2(10), opt_date date);
+create or replace trigger bus_log after insert or delete or update on bus
+declare
+opt varchar2(10);
+begin
+if inserting then
+opt:='insert operation';
+elsif updating then
+opt:='update operation';
+else
+opt:='delete operation';
+end if;
+insert into bus_dml_log values(seq_bus_dml.NEXTVAL, user, opt,sysdate);
+end;
+
+
+create table bus_price_uplog(bus_no number not null, old_bus_price number(10), new_bus_price number(10), opt_date date);
+create or replace trigger bus_price_uplog after update of bus_cost on bus
+for each row
+begin
+insert into bus_price_uplog values(:old.bus_id,:old.bus_cost, :new.bus_cost, sysdate);
+end;
+
+
+
+create or replace trigger ticket_trigger before insert or update of total_ticket on ticket
+for each row
+begin
+if :new.total_ticket<1 or :new.total_ticket>9 then
+raise_application_error(-20500,'No. Of ticket must be from 1 to 9');
+end if;
+end;
+
